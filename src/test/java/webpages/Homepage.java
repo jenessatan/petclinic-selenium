@@ -1,4 +1,4 @@
-// page url: localhost:9966/petclinic
+package webpages;// page url: localhost:9966/petclinic
 
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;

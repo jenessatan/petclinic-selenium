@@ -1,9 +1,12 @@
+package tests;
+
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.testng.Assert;
 import org.testng.annotations.AfterSuite;
 import org.testng.annotations.BeforeSuite;
 import org.testng.annotations.Test;
+import webpages.*;
 
 import java.util.concurrent.TimeUnit;
 
@@ -12,7 +15,7 @@ public class TestPlan {
 
     @BeforeSuite
     public static void main(String[] args) {
-        // ChromeDriver location set up in Utils class
+        // ChromeDriver location set up in webpages.Utils class
         System.setProperty("webdriver.chrome.driver", Utils.CHROME_DRIVER_LOCATION);
     }
 
@@ -22,11 +25,11 @@ public class TestPlan {
         driver.get(Utils.BASE_URL);
         NavBar navbar = new NavBar(driver);
 
-        //Navigate away from Homepage
+        //Navigate away from webpages.Homepage
         navbar.pressErrorButton();
         driver.manage().timeouts().implicitlyWait(5, TimeUnit.SECONDS);
 
-        //Navigate back to Homepage
+        //Navigate back to webpages.Homepage
         navbar.pressHomeButton();
         Homepage homepage = new Homepage(driver);
         driver.manage().timeouts().implicitlyWait(5, TimeUnit.SECONDS);
