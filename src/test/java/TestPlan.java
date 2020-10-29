@@ -1,5 +1,6 @@
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
+import org.testng.Assert;
 import org.testng.annotations.AfterSuite;
 import org.testng.annotations.BeforeSuite;
 import org.testng.annotations.Test;
@@ -20,12 +21,18 @@ public class TestPlan {
         System.out.println("nav home test");
         driver.get(Utils.BASE_URL);
         NavBar navbar = new NavBar(driver);
+
+        //Navigate away from Homepage
         navbar.pressErrorButton();
         driver.manage().timeouts().implicitlyWait(5, TimeUnit.SECONDS);
+
+        //Navigate back to Homepage
         navbar.pressHomeButton();
         Homepage homepage = new Homepage(driver);
         driver.manage().timeouts().implicitlyWait(5, TimeUnit.SECONDS);
-        homepage.hasWelcomeHeader();
+
+        Assert.assertTrue(homepage.hasWelcomeHeader());
+        Assert.assertTrue(homepage.hasCorrectPath());
     }
 
     @AfterSuite(alwaysRun = true)
