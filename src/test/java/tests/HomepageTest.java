@@ -10,7 +10,7 @@ import webpages.*;
 
 import java.util.concurrent.TimeUnit;
 
-public class TestPlan {
+public class HomepageTest {
     private static final WebDriver driver = new ChromeDriver();
 
     @BeforeSuite
