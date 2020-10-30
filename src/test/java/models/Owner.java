@@ -2,17 +2,25 @@ package models;
 
 import net.bytebuddy.utility.RandomString;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 import java.util.Random;
 
 public class Owner {
 
     public Owner(String firstName, String lastName,
-                 String address, String city, String telephone) {
+                 String address, String city, String telephone, List<Pet> pets) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.address = address;
         this.city = city;
         this.telephone = telephone;
+        if (pets == null) {
+            this.pets = new ArrayList <Pet>();
+        } else {
+            this.pets = pets;
+        }
     }
     /**
      * Constructor: Creates an Owner with randomly generated values
@@ -32,17 +40,30 @@ public class Owner {
     private String address;
     private String city;
     private String telephone;
+    private List <Pet> pets;
+
+    public Boolean hasSameInfo(Owner owner) {
+        return firstName.equals(owner.getFirstName())
+                && lastName.equals(owner.getLastName())
+                && address.equals(owner.getAddress())
+                && city.equals(owner.getCity())
+                && telephone.equals(owner.getTelephone());
+    }
 
     public String getFirstName(){return firstName;}
     public String getLastName(){return lastName;}
     public String getAddress() {return address;}
     public String getCity() {return city;}
     public String getTelephone() {return telephone;}
+    public List <Pet> getPets() {return pets;}
 
     public void setLastName(String lastName) {
         this.lastName = lastName;
     }
 
+    public void addPet(Pet pet) {
+        pets.add(pet);
+    }
 
     /**
      * HELPER METHOD

@@ -9,7 +9,7 @@ import org.openqa.selenium.support.FindBy;
 public class OwnerInfoPage extends PageObject {
     public OwnerInfoPage(WebDriver driver) {
         super(driver);
-        initTableElemParams();
+        initTableElemFields();
     }
 
     private String EXPECTED_PATH_SUBSTR = "/petclinic/owners";
@@ -72,7 +72,7 @@ public class OwnerInfoPage extends PageObject {
                 && td_telephone.equals(owner.getTelephone());
     }
 
-    private void initTableElemParams() {
+    private void initTableElemFields() {
         ownerTableBody = ownerTable.findElement(By.xpath("//tbody"));
         initTableHeaders();
         initTableData();

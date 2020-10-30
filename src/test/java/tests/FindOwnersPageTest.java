@@ -72,6 +72,10 @@ public class FindOwnersPageTest {
         navToFindOwnersPage();
 
         //search for newly created owner: expect list of owners (at least 2)
+        findOwnersPage.searchForOwners(owner2.getLastName());
+        OwnersListingPage ownersListingPage = new OwnersListingPage(driver);
+        Assert.assertTrue(ownersListingPage.getNumOwnersInList() > 1);
+        Assert.assertTrue(ownersListingPage.isOwnerInList(owner2));
     }
 
     private static void addOwner(Owner owner){
