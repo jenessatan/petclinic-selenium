@@ -30,6 +30,7 @@ public class FindOwnersPageTest {
 
         //Navigate to FindOwners Page
         navToFindOwnersPage();
+        driver.manage().timeouts().implicitlyWait(5, TimeUnit.SECONDS);
     }
 
     @Test(enabled = true)
@@ -68,7 +69,7 @@ public class FindOwnersPageTest {
 
         Assert.assertTrue(ownerInfoPage.hasCorrectOwnerInfo(owner1),
                 "OwnerInfoPage doesn't display newly added owner's info");
-        
+
         navToFindOwnersPage();
 
         //add another owner with same last name
@@ -81,7 +82,7 @@ public class FindOwnersPageTest {
         findOwnersPage.searchForOwners(owner2.getLastName());
         OwnersListingPage ownersListingPage = new OwnersListingPage(driver);
 
-        Assert.assertTrue(ownersListingPage.getNumOwnersInList() > 1 ,
+        Assert.assertTrue(ownersListingPage.getTotalNumOwnersInList() > 1 ,
                 "Number of ownersListingPage is incorrect");
         Assert.assertTrue(ownersListingPage.isOwnerInList(owner2),
                 "Newly added owner is not found in OwnersListingPage");
@@ -94,7 +95,7 @@ public class FindOwnersPageTest {
 
         findOwnersPage.searchForOwners("");
         OwnersListingPage ownersListingPage = new OwnersListingPage(driver);
-        Assert.assertTrue(ownersListingPage.getNumOwnersInList() > 0,
+        Assert.assertTrue(ownersListingPage.getTotalNumOwnersInList() > 0,
                 "Searching empty string should result in all users in database/storage");
     }
 
