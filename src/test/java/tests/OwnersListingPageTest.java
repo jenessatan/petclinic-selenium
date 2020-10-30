@@ -18,6 +18,7 @@ public class OwnersListingPageTest {
 
     private static Owner owner1;
     private static Owner owner2;
+    private static Owner owner3;
 
     @BeforeSuite
     public static void main(String[] args) {
@@ -32,11 +33,15 @@ public class OwnersListingPageTest {
 
         owner1 = new Owner();
         owner2 = new Owner();
+        owner3 = new Owner();
+        owner3.setLastName(owner1.getLastName());
 
         navToFindOwnersPage();
         addOwner(owner1);
         navToFindOwnersPage();
         addOwner(owner2);
+        navToFindOwnersPage();
+        addOwner(owner3);
 
         navToOwnersListingPage();
     }
@@ -48,11 +53,11 @@ public class OwnersListingPageTest {
 
         //Navigate to OwnersListing Page
         navToOwnersListingPage();
+        driver.manage().timeouts().implicitlyWait(5, TimeUnit.SECONDS);
     }
 
     @Test(enabled = true)
     public static void navigateToOwnersListingPageTest() {
-        navToOwnersListingPage();
         Assert.assertTrue(ownersListingPage.hasHeader(),
                 "OwnersListingPage is missing header");
         Assert.assertTrue(ownersListingPage.hasCorrectSearchFilter(),
@@ -65,6 +70,84 @@ public class OwnersListingPageTest {
     public static void searchFilterNonFoundTest() {
         String nonexistent_name = "NON-EXISTENT-LNAME:@12345";
         ownersListingPage.search(nonexistent_name);
+        Assert.assertTrue(ownersListingPage.hasNoMatch(),
+                "'No matching records found' should be displayed when no rows match filter");
+        ownersListingPage.clearSearch();
+    }
+
+    @Test(enabled = true)
+    public static void searchFilterByLastNameTest() {
+        // owner1 and owner3 have same last name
+        ownersListingPage.search(owner1.getLastName());
+
+        Assert.assertFalse(ownersListingPage.hasNoMatch());
+        Assert.assertTrue(ownersListingPage.isOwnerInList(owner1));
+        Assert.assertTrue(ownersListingPage.isOwnerInList(owner3));
+        ownersListingPage.clearSearch();
+    }
+
+    @Test(enabled = true)
+    public static void searchFilterByAddressTest() {
+        ownersListingPage.search(owner1.getAddress());
+
+        Assert.assertFalse(ownersListingPage.hasNoMatch());
+        Assert.assertTrue(ownersListingPage.isOwnerInList(owner1));
+
+        ownersListingPage.clearSearch();
+    }
+
+    @Test(enabled = true)
+    public static void searchFilterByFirstNameTest() {
+        ownersListingPage.search(owner2.getFirstName());
+
+        Assert.assertFalse(ownersListingPage.hasNoMatch());
+        Assert.assertTrue(ownersListingPage.isOwnerInList(owner2));
+
+        ownersListingPage.clearSearch();
+    }
+
+    @Test(enabled = true)
+    public static void searchFilterByCityTest() {
+        ownersListingPage.search(owner3.getCity());
+
+        Assert.assertFalse(ownersListingPage.hasNoMatch());
+        Assert.assertTrue(ownersListingPage.isOwnerInList(owner3));
+
+        ownersListingPage.clearSearch();
+    }
+
+    @Test(enabled = true)
+    public static void searchFilterByTelephoneTest() {
+        ownersListingPage.search(owner3.getTelephone());
+
+        Assert.assertFalse(ownersListingPage.hasNoMatch());
+        Assert.assertTrue(ownersListingPage.isOwnerInList(owner3));
+
+        ownersListingPage.clearSearch();
+    }
+
+    @Test(enabled = true)
+    public static void searchFilterTwice() {
+        //first search
+        ownersListingPage.search(owner1.getFirstName());
+
+        Assert.assertFalse(ownersListingPage.hasNoMatch());
+        Assert.assertTrue(ownersListingPage.isOwnerInList(owner1));
+
+        ownersListingPage.clearSearch();
+
+        //second search
+        ownersListingPage.search(owner2.getTelephone());
+
+        Assert.assertFalse(ownersListingPage.hasNoMatch());
+        Assert.assertTrue(ownersListingPage.isOwnerInList(owner2));
+
+        ownersListingPage.clearSearch();
+    }
+
+    @Test(enabled = true)
+    public static void pdfExportTest() {
+        ownersListingPage.clickPDFButton();
 
     }
 

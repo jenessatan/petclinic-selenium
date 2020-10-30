@@ -2,6 +2,7 @@ package webpages;// Page URL: http://localhost:9966/petclinic/owners.html?lastNa
 
 import models.Owner;
 import org.openqa.selenium.By;
+import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
@@ -37,7 +38,9 @@ public class OwnersListingPage extends PageObject {
     @FindBy(id = "owners")
     private WebElement owners_table;
 
-    /** table elements: initiate with owners_table */
+    /**
+     * table elements: initiate with owners_table
+     */
     //Table Header elements: Column headers
     private WebElement name_columnHeader;
     private WebElement address_columnHeader;
@@ -66,6 +69,20 @@ public class OwnersListingPage extends PageObject {
         initTableRows(false);
     }
 
+    public void clickPDFButton() {
+        pdf_button.click();
+    }
+
+    public Boolean hasNoMatch() {
+        try {
+            Boolean has_no_match = no_matching_elems != null &&
+            no_matching_elems.getText().equals("No matching records found");
+            return has_no_match;
+        } catch (NoSuchElementException e) {
+          return false;
+        }
+    }
+
     public Boolean hasHeader() {
         return header != null;
     }
@@ -86,10 +103,11 @@ public class OwnersListingPage extends PageObject {
         Boolean isInList = false;
         WebElement[] tds;
 
-        for (WebElement tr: original_table_rows) {
+        for (WebElement tr : filtered_table_rows) {
             tds = tr.findElements(By.xpath("child::td")).toArray(new WebElement[0]);
             if (tds.length == 5) {
                 isInList = isInList || isRowOwner(owner, tds);
+                if (isInList) return isInList;
             } else {
                 return isInList;
             }
@@ -137,6 +155,7 @@ public class OwnersListingPage extends PageObject {
             filtered_table_rows = table_rows;
         } else {
             filtered_table_rows = table_rows;
+            initNoMatchingElems();
         }
     }
 
@@ -146,6 +165,16 @@ public class OwnersListingPage extends PageObject {
         city_columnHeader = owners_table.findElement(By.xpath("//th[contains(text(), 'City')]"));
         telephone_columnHeader = owners_table.findElement(By.xpath("//th[contains(text(), 'Telephone')]"));
         pets_columnHeader = owners_table.findElement(By.xpath("//th[contains(text(), 'Pets')]"));
+    }
+
+    private void initNoMatchingElems() {
+        if (has_filter_input && filtered_table_rows.length == 1) {
+            try {
+                no_matching_elems = filtered_table_rows[0].findElement(By.xpath("child::td[@class='dataTables_empty']"));
+            } catch (NoSuchElementException e) {
+                no_matching_elems = null;
+            }
+        }
     }
 
     private Boolean hasCorrectColumnHeaders() {
@@ -160,6 +189,7 @@ public class OwnersListingPage extends PageObject {
         Boolean isCorrectLength = original_table_rows.length >= 2;
         if (has_filter_input) {
             return isCorrectLength && filtered_table_rows.length > 0;
-        } return isCorrectLength && filtered_table_rows.length > 2;
+        }
+        return isCorrectLength && filtered_table_rows.length > 2;
     }
 }
