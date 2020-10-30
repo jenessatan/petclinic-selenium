@@ -65,7 +65,7 @@ public class OwnersListingPage extends PageObject {
                 String[] first_and_last_name = td_name.getText().split(" ");
                 String first_name = first_and_last_name[0];
                 String last_name = first_and_last_name[1];
-                
+
                 Owner owner_in_list = new Owner(first_name, last_name,
                         td_address.getText(), td_city.getText(), td_telephone.getText(), null);
 

@@ -29,29 +29,32 @@ public class FindOwnersPageTest {
         navBar = new NavBar(driver);
 
         //Navigate to FindOwners Page
-        navBar.pressFindOwnersButton();
-        findOwnersPage = new FindOwnersPage(driver);
-        driver.manage().timeouts().implicitlyWait(5, TimeUnit.SECONDS);
+        navToFindOwnersPage();
     }
 
     @Test(enabled = true)
     public static void navigateToFindOwnersPageTest(){
-        Assert.assertTrue(findOwnersPage.hasCorrectPath());
+        Assert.assertTrue(findOwnersPage.hasCorrectPath(),
+                "Path for findOwners page is incorrect");
 
-        Assert.assertTrue(findOwnersPage.hasFindOwnersHeader());
-        Assert.assertTrue(findOwnersPage.hasCorrectSearchForm());
-        Assert.assertTrue(findOwnersPage.hasAddOwnerLink());
+        Assert.assertTrue(findOwnersPage.hasFindOwnersHeader(),
+                "FindOwners page is missing header");
+        Assert.assertTrue(findOwnersPage.hasCorrectSearchForm(),
+                "FindOwner's search form is malformed");
+        Assert.assertTrue(findOwnersPage.hasAddOwnerLink(),
+                "FindOwner is missing Add Owner link");
     }
 
     @Test(enabled = true)
     public static void searchNonExistentOwnersTest(){
-        findOwnersPage.searchForOwners("@12345");
+        findOwnersPage.searchForOwners("NON-EXISTENT-LNAME:@12345");
         WebElement hasNotBeenFound = driver.findElement(By.id("owner.errors"));
-        Assert.assertTrue(hasNotBeenFound != null);
+        Assert.assertTrue(hasNotBeenFound != null,
+                "'has not been found' message doesn't appear after searching for nonExistent owners");
         driver.manage().timeouts().implicitlyWait(5, TimeUnit.SECONDS);
     }
 
-    @Test
+    @Test(enabled = true)
     public static void searchExistentOwnersTest(){
         Owner owner1 = new Owner();
 
@@ -62,7 +65,10 @@ public class FindOwnersPageTest {
         findOwnersPage.searchForOwners(owner1.getLastName());
 
         OwnerInfoPage ownerInfoPage = new OwnerInfoPage(driver);
-        Assert.assertTrue(ownerInfoPage.hasCorrectOwnerInfo(owner1));
+
+        Assert.assertTrue(ownerInfoPage.hasCorrectOwnerInfo(owner1),
+                "OwnerInfoPage doesn't display newly added owner's info");
+        
         navToFindOwnersPage();
 
         //add another owner with same last name
@@ -74,9 +80,26 @@ public class FindOwnersPageTest {
         //search for newly created owner: expect list of owners (at least 2)
         findOwnersPage.searchForOwners(owner2.getLastName());
         OwnersListingPage ownersListingPage = new OwnersListingPage(driver);
-        Assert.assertTrue(ownersListingPage.getNumOwnersInList() > 1);
-        Assert.assertTrue(ownersListingPage.isOwnerInList(owner2));
+
+        Assert.assertTrue(ownersListingPage.getNumOwnersInList() > 1 ,
+                "Number of ownersListingPage is incorrect");
+        Assert.assertTrue(ownersListingPage.isOwnerInList(owner2),
+                "Newly added owner is not found in OwnersListingPage");
     }
+
+    @Test(enabled = true)
+    public static void searchAllOwners() {
+        //data doesn't get wiped after each test,
+        //so we assume we have at least two owners in existence now
+
+        findOwnersPage.searchForOwners("");
+        OwnersListingPage ownersListingPage = new OwnersListingPage(driver);
+        Assert.assertTrue(ownersListingPage.getNumOwnersInList() > 0,
+                "Searching empty string should result in all users in database/storage");
+    }
+
+
+    // ------------------------------ HELPERS ---------------------------------- //
 
     private static void addOwner(Owner owner){
         findOwnersPage.clickAddOwnerLink();
