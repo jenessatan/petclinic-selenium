@@ -1,3 +1,5 @@
+package webpages;
+
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
@@ -7,11 +9,10 @@ public class NavBar extends PageObject{
         super(driver);
     }
 
-    @FindBy(xpath = "//a[contains(text(),'\n" +
-            "                Home')]")
+    @FindBy(xpath = "//a[contains(text(), 'Home')]")
     private WebElement home_button;
 
-    @FindBy (xpath="//a[contains(text(), ' Error'")
+    @FindBy (xpath=".//a[contains(text(), ' Error')]")
     private WebElement error_button;
 
     public void pressHomeButton() {
