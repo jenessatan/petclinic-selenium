@@ -6,11 +6,8 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.testng.Assert;
-import org.testng.annotations.AfterSuite;
-import org.testng.annotations.BeforeMethod;
-import org.testng.annotations.BeforeSuite;
+import org.testng.annotations.*;
 
-import org.testng.annotations.Test;
 import webpages.*;
 
 import java.util.concurrent.TimeUnit;
@@ -56,17 +53,23 @@ public class FindOwnersPageTest {
 
     @Test
     public static void searchExistentOwnersTest(){
-        Owner owner_robert = new Owner("Robert", "Shaw",
-                "Random Address", "Victoria", "6041231234");
+        Owner owner1 = new Owner();
 
-        //add an owner and nav back to findOwners page
-        addOwner(owner_robert);
+        //add a single owner and nav back to findOwners page
+        addOwner(owner1);
         navToFindOwnersPage();
         //search for newly created owner
-        findOwnersPage.searchForOwners(owner_robert.getLastName());
+        findOwnersPage.searchForOwners(owner1.getLastName());
 
+        OwnerInfoPage ownerInfoPage = new OwnerInfoPage(driver);
 
+        //add another owner with same last name
+        Owner owner2 = new Owner();
+        owner2.setLastName(owner1.getLastName());
+        addOwner(owner2);
+        navToFindOwnersPage();
 
+        //search for newly created owner: expect list of owners (at least 2)
     }
 
     private static void addOwner(Owner owner){
