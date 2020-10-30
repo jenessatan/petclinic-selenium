@@ -1,5 +1,6 @@
 package webpages; // Page URL: http://localhost:9966/petclinic/owners/{ownerId}
 
+import models.Owner;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -57,6 +58,20 @@ public class OwnerInfoPage extends PageObject {
         return test;
     }
 
+    public Boolean hasCorrectOwnerInfo(Owner owner) {
+        String ownerFullName = owner.getFirstName() + " " + owner.getLastName();
+
+        String td_name = tableData_name.getText();
+        String td_address = tableData_address.getText();
+        String td_city = tableData_city.getText();
+        String td_telephone = tableData_telephone.getText();
+
+        return td_name.equals(ownerFullName)
+                && td_address.equals(owner.getAddress())
+                && td_city.equals(owner.getCity())
+                && td_telephone.equals(owner.getTelephone());
+    }
+
     private void initTableElemParams() {
         ownerTableBody = ownerTable.findElement(By.xpath("//tbody"));
         initTableHeaders();
@@ -72,6 +87,8 @@ public class OwnerInfoPage extends PageObject {
 
     private void initTableData() {
         tableData_name = tableHeader_name.findElement(By.xpath("following-sibling::td"));
-        System.out.println(tableData_name.getText());
+        tableData_address = tableHeader_address.findElement(By.xpath("following-sibling::td"));
+        tableData_city = tableHeader_city.findElement(By.xpath("following-sibling::td"));
+        tableData_telephone = tableHeader_telephone.findElement(By.xpath("following-sibling::td"));
     }
 }

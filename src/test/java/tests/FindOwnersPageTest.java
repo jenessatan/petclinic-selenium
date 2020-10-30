@@ -62,6 +62,8 @@ public class FindOwnersPageTest {
         findOwnersPage.searchForOwners(owner1.getLastName());
 
         OwnerInfoPage ownerInfoPage = new OwnerInfoPage(driver);
+        Assert.assertTrue(ownerInfoPage.hasCorrectOwnerInfo(owner1));
+        navToFindOwnersPage();
 
         //add another owner with same last name
         Owner owner2 = new Owner();
