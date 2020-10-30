@@ -22,7 +22,6 @@ public class PageObject {
         try {
             String pathWithSession = new URL(url).getPath();
             path = pathWithSession.split(";")[0];
-            System.out.println("getPath " + path);
         } catch (MalformedURLException e) {
             e.printStackTrace();
             return "Error: trying to get path from malformed url";
