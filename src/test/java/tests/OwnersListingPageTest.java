@@ -3,10 +3,13 @@ package tests;
 import models.Owner;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.chrome.ChromeOptions;
+import org.openqa.selenium.support.ui.WebDriverWait;
 import org.testng.Assert;
 import org.testng.annotations.*;
 import webpages.*;
 
+import java.io.File;
 import java.util.concurrent.TimeUnit;
 
 public class OwnersListingPageTest {
@@ -19,6 +22,8 @@ public class OwnersListingPageTest {
     private static Owner owner1;
     private static Owner owner2;
     private static Owner owner3;
+
+//    private static int numFilesInDownloads;
 
     @BeforeSuite
     public static void main(String[] args) {
@@ -44,6 +49,8 @@ public class OwnersListingPageTest {
         addOwner(owner3);
 
         navToOwnersListingPage();
+
+//        numFilesInDownloads = getNumContentsInDownloads("C:\\Users\\Jackie\\Downloads");
     }
 
     @BeforeMethod
@@ -145,13 +152,58 @@ public class OwnersListingPageTest {
         ownersListingPage.clearSearch();
     }
 
-    @Test(enabled = true)
-    public static void pdfExportTest() {
-        ownersListingPage.clickPDFButton();
-
-    }
+    /**
+     * Test a WIP, because it's complicated to automate the verification of downloads
+     *
+     * From Selenium docs:
+     * "Whilst it is possible to start a download by clicking a link with a browser under Selenium’s control,
+     * the API does not expose download progress, making it less than ideal for testing downloaded files.
+     * This is because downloading files is not considered an important aspect of
+     * emulating user interaction with the web platform."
+     *
+     * Link: https://www.selenium.dev/documentation/en/worst_practices/file_downloads/
+     * */
+//    @Test(enabled = false)
+//    public static void pdfExportTest() {
+//        String downloadPath = "C:\\downloads";
+//        Boolean fileExists = false;
+//
+//        ChromeOptions chromeOptions = new ChromeOptions();
+//        chromeOptions.addArguments()
+//
+////        ownersListingPage.clickPDFButton();
+//        System.out.println(numFilesInDownloads);
+//        ownersListingPage.clickPDFButton();
+//        int test = getNumContentsInDownloads("C:\\Users\\Jackie\\Downloads");
+//
+//        WebDriverWait wait = new WebDriverWait(driver, 60);
+//        wait.until(null);
+//        System.out.println(test);
+//    }
 
     // ------------------------------ HELPERS ---------------------------------- //
+
+    private static int getNumContentsInDownloads(String downloadPath) {
+        File dir = new File(downloadPath);
+        File[] dir_contents = dir.listFiles();
+
+        return dir_contents.length;
+    }
+
+    private Boolean isFileDownloaded(String downloadPath, String fileName, String ext) {
+        Boolean isFileDownloaded = false;
+
+        File dir = new File(downloadPath);
+        File[] dir_contents = dir.listFiles();
+
+        for (int i = 0; i < dir_contents.length; i++) {
+            if (dir_contents[i].getName().contains(fileName))
+                isFileDownloaded=true;
+            dir_contents[i].delete();
+        }
+
+        return isFileDownloaded;
+    }
 
     private static void addOwner(Owner owner){
         findOwnersPage.clickAddOwnerLink();
