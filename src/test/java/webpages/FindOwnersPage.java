@@ -8,7 +8,7 @@ import org.openqa.selenium.support.FindBy;
 public class FindOwnersPage extends PageObject {
     public FindOwnersPage(WebDriver driver) {
         super(driver);
-        search_input = search_form.findElement(By.xpath("//label[contains(text(), 'Last name')]"));
+        search_label = search_form.findElement(By.xpath("//label[contains(text(), 'Last name')]"));
         search_input = search_form.findElement(By.xpath("//input[@id='lastName']"));
         submit_button = search_form.findElement(By.xpath("//button[@type='submit']"));
     }
